@@ -32,6 +32,9 @@ app.use(
 // Static Files
 app.use(express.static(path.join(__dirname, "public")));
 
+const securityMiddleware = require("./middleware/securityMiddleware");
+app.use(securityMiddleware.checkInactivity);
+
 // EJS Setup
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -73,18 +76,28 @@ app.get("/register", (req, res) => {
 
 // Dashboard Page
 const transactionModel = require("./models/transactionModel");
+const securityLogs = require("./models/securityLogs");
 app.get("/dashboard", authMiddleware, (req, res) => {
   transactionModel.getTransactionsByUserId(res.locals.user.id, (err, transactions) => {
     if (err) {
       console.error("Error fetching transactions for dashboard:", err.message);
       transactions = [];
     }
-    res.render("dashboard", {
-      title: "Dashboard - ApexTrust Bank",
-      activePage: "dashboard",
-      success: req.query.success || null,
-      error: req.query.error || null,
-      transactions: transactions
+
+    securityLogs.getLogsByUserId(res.locals.user.id, (logErr, logs) => {
+      if (logErr) {
+        console.error("Error fetching security logs for dashboard:", logErr.message);
+        logs = [];
+      }
+      res.render("dashboard", {
+        title: "Dashboard - ApexTrust Bank",
+        activePage: "dashboard",
+        success: req.query.success || null,
+        error: req.query.error || null,
+        transactions: transactions,
+        securityLogs: logs,
+        clientIp: req.ip
+      });
     });
   });
 });

@@ -1,22 +1,25 @@
-/* ApexTrust Bank Global Design System */
+/* ApexTrust Bank Global Design System - Premium Dark Theme */
 
 :root {
-  --primary: #0f172a;        /* Deep Navy Blue */
-  --primary-light: #1e293b;  /* Lighter Navy for Cards */
-  --dark-blue: #0f172a;      /* Dark accent for footer */
+  --primary: #0b1329;        /* Deep Navy Blue background */
+  --primary-light: #15203c;  /* Cards/Widgets Background */
+  --dark-blue: #070d1a;      /* Dark accent for footer */
   --accent: #2563eb;         /* Royal Accent Blue */
   --accent-hover: #1d4ed8;   /* Royal Accent Hover */
-  --accent-light: #eff6ff;   /* Soft Ice Blue */
+  --accent-light: rgba(37, 99, 235, 0.15); /* Soft Ice Blue Translucent */
+  
   --success: #10b981;        /* Emerald Success */
-  --success-light: #ecfdf5;  /* Soft Emerald */
+  --success-light: rgba(16, 185, 129, 0.12); /* Soft Emerald Translucent */
   --warning: #f59e0b;        /* Alert Amber */
-  --warning-light: #fffbeb;  /* Soft Amber */
+  --warning-light: rgba(245, 158, 11, 0.12); /* Soft Amber Translucent */
   --danger: #ef4444;         /* Alert Red */
-  --danger-light: #fef2f2;   /* Soft Red */
-  --bg-gray: #f8fafc;        /* Cool Gray Page Background */
-  --border-color: #e2e8f0;   /* Slate Border */
-  --text-main: #334155;      /* Slate Text */
-  --text-muted: #64748b;     /* Muted Slate Text */
+  --danger-light: rgba(239, 68, 68, 0.12); /* Soft Red Translucent */
+  
+  --bg-gray: #0b1329;        /* Dark Navy Page Background */
+  --card-bg: #111e38;        /* Professional Card Background */
+  --border-color: #22314f;   /* Dark navy border color */
+  --text-main: #f8fafc;      /* Bright Slate Text for readability */
+  --text-muted: #94a3b8;     /* Muted Slate Text */
   --white: #ffffff;
 }
 
@@ -41,10 +44,11 @@ main {
 /* Custom Navbar */
 .bg-navy {
   background-color: var(--primary) !important;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .border-dark-blue {
-  border-color: #1e293b !important;
+  border-color: var(--border-color) !important;
 }
 
 .navbar-brand {
@@ -98,7 +102,7 @@ main {
   position: relative;
 }
 
-@media (min-content-width: 992px) {
+@media (min-width: 992px) {
   .navbar-nav .nav-link.active::after {
     content: '';
     position: absolute;
@@ -116,6 +120,11 @@ main {
   color: #cbd5e1 !important;
 }
 
+.footer {
+  background-color: var(--dark-blue) !important;
+  border-top: 1px solid var(--border-color);
+}
+
 .footer-links a {
   transition: color 0.15s ease-in-out;
 }
@@ -126,22 +135,37 @@ main {
 
 /* Card Styling */
 .card-premium {
-  background-color: var(--white);
+  background-color: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-premium.hover-action:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 0 15px rgba(37, 99, 235, 0.1);
 }
 
 /* Custom Forms */
+.form-floating > .form-control {
+  background-color: #16223f;
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+.form-floating > .form-control:focus {
+  background-color: #192748;
+  color: var(--text-main);
+}
+
+.form-floating > label {
+  color: var(--text-muted);
+}
+
 .form-floating > .form-control:focus ~ label,
 .form-floating > .form-control:not(:placeholder-shown) ~ label {
-  color: var(--accent);
+  color: #60a5fa;
 }
 
 .form-control {
@@ -153,7 +177,20 @@ main {
 
 .form-control:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+.form-select {
+  background-color: #16223f;
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+.form-select:focus {
+  background-color: #192748;
+  color: var(--text-main);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
 /* Custom Buttons */
@@ -172,15 +209,15 @@ main {
   border-color: var(--accent-hover);
   color: var(--white);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 /* Balance Card Accent */
 .balance-card {
-  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   color: var(--white);
-  border: none;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.3);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 0 15px rgba(59, 130, 246, 0.1);
 }
 
 .balance-card .card-subtitle {
@@ -218,7 +255,7 @@ main {
 
 .icon-primary {
   background-color: var(--accent-light);
-  color: var(--accent);
+  color: #60a5fa;
 }
 
 .icon-success {
@@ -270,12 +307,100 @@ main {
   transition: all 0.2s ease;
   border: 1px solid transparent;
 }
+
 .nav-pills .nav-link:hover {
-  background-color: var(--bg-gray);
-  color: var(--primary);
+  background-color: #16223f;
+  color: #60a5fa;
 }
+
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   background-color: var(--accent);
   color: var(--white);
-  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
+}
+
+/* High contrast overrides for Bootstrap classes in dark mode */
+.text-dark {
+  color: var(--text-main) !important;
+}
+
+.text-muted {
+  color: var(--text-muted) !important;
+}
+
+.bg-light {
+  background-color: #15203c !important;
+}
+
+.border {
+  border-color: var(--border-color) !important;
+}
+
+/* Badge colors for security activities */
+.bg-success-light {
+  background-color: var(--success-light) !important;
+  color: var(--success) !important;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.bg-danger-light {
+  background-color: var(--danger-light) !important;
+  color: var(--danger) !important;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.bg-warning-light {
+  background-color: var(--warning-light) !important;
+  color: var(--warning) !important;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.bg-info-light {
+  background-color: rgba(6, 182, 212, 0.12) !important;
+  color: #06b6d4 !important;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+/* Dark Modal Styling */
+.modal-content {
+  background-color: var(--card-bg) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px;
+}
+
+.modal-header, .modal-footer {
+  border-color: var(--border-color) !important;
+}
+
+.modal-footer.bg-light {
+  background-color: #15203c !important;
+}
+
+/* Responsive Table Adjustments */
+.table {
+  color: var(--text-main) !important;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+/* Alerts custom styling */
+.alert-success {
+  background-color: rgba(16, 185, 129, 0.12) !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
+  color: #10b981 !important;
+}
+
+.alert-danger {
+  background-color: rgba(239, 68, 68, 0.12) !important;
+  border-color: rgba(239, 68, 68, 0.25) !important;
+  color: #ef4444 !important;
+}
+
+.alert-warning {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
+  color: #f59e0b !important;
 }

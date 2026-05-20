@@ -115,8 +115,11 @@ const loginValidation = [
     .withMessage('Password is required.')
 ];
 
+const securityLogs = require('../models/securityLogs');
+const securityMiddleware = require('../middleware/securityMiddleware');
+
 // POST /login
-router.post('/login', loginValidation, (req, res) => {
+router.post('/login', securityMiddleware.checkFailedLoginLimit, loginValidation, (req, res) => {
   const errors = validationResult(req);
   const values = req.body;
 
@@ -147,6 +150,7 @@ router.post('/login', loginValidation, (req, res) => {
     }
 
     if (!user) {
+      securityMiddleware.registerFailedLogin(req.ip, null);
       return res.render('login', {
         title: 'Secure Login - ApexTrust Bank',
         activePage: 'login',
@@ -171,6 +175,7 @@ router.post('/login', loginValidation, (req, res) => {
       }
 
       if (!isMatch) {
+        securityMiddleware.registerFailedLogin(req.ip, user.id);
         return res.render('login', {
           title: 'Secure Login - ApexTrust Bank',
           activePage: 'login',
@@ -181,29 +186,70 @@ router.post('/login', loginValidation, (req, res) => {
         });
       }
 
-      // Successful login - Create Session variables
+      // Successful login - Reset failed login attempts
+      securityMiddleware.resetFailedLogin(req.ip);
+
+      // Create Session variables
       req.session.userId = user.id;
       req.session.userEmail = user.email;
       req.session.loginTime = new Date().toISOString();
+      req.session.loginTimeMs = Date.now();
+      req.session.lastActive = Date.now();
 
-      console.log(`User logged in successfully: ${user.email}`);
-      res.redirect('/dashboard');
+      // Log successful login session in database
+      securityLogs.logLogin(user.id, req.ip, (logErr, logId) => {
+        if (logErr) {
+          console.error('Error creating security log on login:', logErr.message);
+        } else {
+          req.session.securityLogId = logId;
+        }
+
+        console.log(`User logged in successfully: ${user.email}`);
+        res.redirect('/dashboard');
+      });
     });
   });
 });
 
 // GET /logout
 router.get('/logout', (req, res) => {
-  if (req.session) {
+  const isTimeout = req.query.reason === 'timeout';
+
+  if (req.session && req.session.userId) {
+    const logId = req.session.securityLogId;
+    const loginTime = req.session.loginTimeMs || Date.now();
+    const duration = Math.floor((Date.now() - loginTime) / 1000); // duration in seconds
+
+    // Log logout/expiration event in database
+    if (logId) {
+      if (isTimeout) {
+        securityLogs.logInactivityExpiration(logId, duration, (err) => {
+          if (err) console.error('Error logging inactivity expiration:', err.message);
+        });
+      } else {
+        securityLogs.logLogout(logId, duration, (err) => {
+          if (err) console.error('Error logging logout session:', err.message);
+        });
+      }
+    }
+
     req.session.destroy((err) => {
       if (err) {
         console.error('Error destroying session during logout:', err);
       }
       res.clearCookie('connect.sid');
-      res.redirect('/login?success=You+have+been+logged+out+successfully.');
+      if (isTimeout) {
+        res.redirect('/login?error=Session+expired+due+to+inactivity.+For+your+security,+please+log+in+again.');
+      } else {
+        res.redirect('/login?success=You+have+been+logged+out+successfully.');
+      }
     });
   } else {
-    res.redirect('/login');
+    if (isTimeout) {
+      res.redirect('/login?error=Session+expired+due+to+inactivity.+For+your+security,+please+log+in+again.');
+    } else {
+      res.redirect('/login');
+    }
   }
 });
 

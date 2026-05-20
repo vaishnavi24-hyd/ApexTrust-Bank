@@ -5,8 +5,11 @@ const db = require('../models/db');
 const transactionModel = require('../models/transactionModel');
 const authMiddleware = require('../middleware/authMiddleware');
 
-// Secure all transaction routes with the authMiddleware
+const securityMiddleware = require('../middleware/securityMiddleware');
+
+// Secure all transaction routes with the authMiddleware and rate limiter
 router.use(authMiddleware);
+router.use(securityMiddleware.checkRapidTransactions);
 
 // POST /deposit
 router.post(

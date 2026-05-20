@@ -45,6 +45,26 @@ db.serialize(() => {
     }
   });
 
+  db.run(`
+        CREATE TABLE IF NOT EXISTS security_logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            login_time TEXT,
+            logout_time TEXT,
+            ip_address TEXT,
+            session_status TEXT NOT NULL,
+            session_duration INTEGER,
+            description TEXT,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    `, (err) => {
+    if (err) {
+      console.error("Security logs table creation failed:", err.message);
+    } else {
+      console.log("Security logs table ready.");
+    }
+  });
+
 });
 
 module.exports = db;
