@@ -1,0 +1,219 @@
+<%- include('partials/header') %>
+
+<div class="container my-4">
+  
+  <!-- Welcome and Alert Header -->
+  <div class="row align-items-center mb-4 gy-2">
+    <div class="col-md-8">
+      <span class="badge bg-success-light text-success fw-bold px-3 py-2 rounded-pill mb-2">
+        <i class="bi bi-patch-check-fill me-1"></i> Account Active
+      </span>
+      <h2 class="fw-bold text-dark mb-0">Welcome back, John Doe</h2>
+      <p class="text-muted small mb-0">
+        Account: <span class="fw-medium text-dark">#1029-4829-8943</span> &bull; Last access: <span class="fw-medium text-dark">Today at 18:45 (IP: 192.168.1.42)</span>
+      </p>
+    </div>
+    <div class="col-md-4 text-md-end">
+      <!-- Session quick indicator -->
+      <span class="d-inline-flex align-items-center bg-white border px-3 py-2 rounded-3 shadow-sm text-success small fw-medium">
+        <span class="spinner-grow spinner-grow-sm text-success me-2" role="status" style="width: 10px; height: 10px;"></span>
+        Session Encrypted
+      </span>
+    </div>
+  </div>
+
+  <!-- Dashboard Grid -->
+  <div class="row g-4">
+    
+    <!-- Left Column (Balance, Actions, Transactions) -->
+    <div class="col-lg-8">
+      
+      <!-- Balance Card Section -->
+      <div class="card card-premium balance-card p-4 mb-4">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <span class="card-subtitle uppercase small text-uppercase">Primary Checking Balance</span>
+            <h1 class="balance-amount my-2">$24,850.42</h1>
+            <p class="mb-0 text-light-gray small">
+              Available Funds: <span class="text-white fw-bold">$24,850.42</span> &bull; Ledger Balance: <span class="text-white">$25,120.00</span>
+            </p>
+          </div>
+          <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <span class="fs-1 text-white opacity-25">
+              <i class="bi bi-credit-card-2-front-fill"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Banking Actions Grid -->
+      <h5 class="fw-bold text-primary mb-3">Quick Banking Actions</h5>
+      <div class="row g-3 mb-4">
+        
+        <div class="col-6 col-sm-3">
+          <div class="card card-premium hover-action text-center p-3 h-100 cursor-pointer">
+            <div class="icon-circle icon-primary mx-auto mb-2">
+              <i class="bi bi-arrow-left-right"></i>
+            </div>
+            <span class="small fw-semibold text-dark">Transfer Funds</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-3">
+          <div class="card card-premium hover-action text-center p-3 h-100 cursor-pointer">
+            <div class="icon-circle icon-success mx-auto mb-2">
+              <i class="bi bi-receipt"></i>
+            </div>
+            <span class="small fw-semibold text-dark">Pay Bills</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-3">
+          <div class="card card-premium hover-action text-center p-3 h-100 cursor-pointer">
+            <div class="icon-circle icon-warning mx-auto mb-2">
+              <i class="bi bi-camera"></i>
+            </div>
+            <span class="small fw-semibold text-dark">Deposit Check</span>
+          </div>
+        </div>
+
+        <div class="col-6 col-sm-3">
+          <div class="card card-premium hover-action text-center p-3 h-100 cursor-pointer">
+            <div class="icon-circle icon-danger mx-auto mb-2">
+              <i class="bi bi-file-earmark-bar-graph"></i>
+            </div>
+            <span class="small fw-semibold text-dark">Statements</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Recent Transactions Section -->
+      <div class="card card-premium p-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h5 class="fw-bold text-primary mb-0">Recent Transactions</h5>
+          <a href="#" class="text-accent text-decoration-none small fw-semibold">View All Activity</a>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-transactions align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th class="text-end">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td class="text-muted small">May 20, 2026</td>
+                <td>
+                  <div class="fw-bold text-dark">Chevron Gas Station</div>
+                  <span class="small text-muted">Card ending in 8943</span>
+                </td>
+                <td><span class="badge bg-light text-dark border">Transportation</span></td>
+                <td><span class="text-success small fw-medium"><i class="bi bi-check-circle-fill me-1"></i> Completed</span></td>
+                <td class="text-end transaction-amount amount-out">-$45.20</td>
+              </tr>
+
+              <tr>
+                <td class="text-muted small">May 19, 2026</td>
+                <td>
+                  <div class="fw-bold text-dark">Payroll ACH / ApexTech Corp</div>
+                  <span class="small text-muted">Direct Deposit</span>
+                </td>
+                <td><span class="badge bg-light text-dark border">Income</span></td>
+                <td><span class="text-success small fw-medium"><i class="bi bi-check-circle-fill me-1"></i> Completed</span></td>
+                <td class="text-end transaction-amount amount-in">+$3,450.00</td>
+              </tr>
+
+              <tr>
+                <td class="text-muted small">May 18, 2026</td>
+                <td>
+                  <div class="fw-bold text-dark">Starbucks Coffee #3842</div>
+                  <span class="small text-muted">Card ending in 8943</span>
+                </td>
+                <td><span class="badge bg-light text-dark border">Dining</span></td>
+                <td><span class="text-success small fw-medium"><i class="bi bi-check-circle-fill me-1"></i> Completed</span></td>
+                <td class="text-end transaction-amount amount-out">-$12.80</td>
+              </tr>
+
+              <tr>
+                <td class="text-muted small">May 17, 2026</td>
+                <td>
+                  <div class="fw-bold text-dark">Landlord Rent Payment</div>
+                  <span class="small text-muted">ACH Transfer</span>
+                </td>
+                <td><span class="badge bg-light text-dark border">Housing</span></td>
+                <td><span class="text-warning small fw-medium"><i class="bi bi-clock-fill me-1"></i> Pending</span></td>
+                <td class="text-end transaction-amount amount-out">-$1,200.00</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Column (Session Tracker & Security Details) -->
+    <div class="col-lg-4">
+      
+      <!-- Session Status Widget -->
+      <div class="card card-premium session-card active-session p-4 mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h5 class="fw-bold text-primary mb-0">Session Status</h5>
+          <span class="badge bg-success text-white">Secure</span>
+        </div>
+
+        <div class="text-center py-3 my-2 bg-light rounded-3">
+          <div class="display-6 fw-bold text-primary mb-1">14:59</div>
+          <span class="text-muted small text-uppercase fw-semibold tracking-wider">Minutes Remaining</span>
+        </div>
+
+        <ul class="list-unstyled small mb-4">
+          <li class="d-flex align-items-center justify-content-between py-2 border-bottom">
+            <span class="text-muted">Auth Status:</span>
+            <span class="fw-semibold text-success">Verified Credentials</span>
+          </li>
+          <li class="d-flex align-items-center justify-content-between py-2 border-bottom">
+            <span class="text-muted">Inactivity Timeout:</span>
+            <span class="fw-semibold">15 Minutes</span>
+          </li>
+          <li class="d-flex align-items-center justify-content-between py-2">
+            <span class="text-muted">Tracking Token:</span>
+            <code class="text-dark">apt_938fd8a2e1</code>
+          </li>
+        </ul>
+
+        <!-- Extend Session Button -->
+        <button class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center py-2">
+          <i class="bi bi-arrow-repeat me-2"></i> Extend Secure Session
+        </button>
+      </div>
+
+      <!-- Security Advisory Widget -->
+      <div class="card card-premium p-4">
+        <h5 class="fw-bold text-primary mb-3">
+          <i class="bi bi-shield-shaded text-accent me-1"></i> Security Center
+        </h5>
+        
+        <p class="small text-muted mb-3">
+          Your online session is continuously monitored to prevent unauthorized access. If you notice any suspicious activity, freeze your account immediately.
+        </p>
+
+        <div class="alert alert-warning border-0 small mb-0 rounded-3">
+          <h6 class="alert-heading fw-bold mb-1"><i class="bi bi-exclamation-triangle-fill me-1"></i> Safety Tip</h6>
+          ApexTrust will never ask for your account password or session token via email or SMS.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<%- include('partials/footer') %>
