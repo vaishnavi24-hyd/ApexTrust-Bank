@@ -27,6 +27,24 @@ db.serialize(() => {
     }
   });
 
+  db.run(`
+        CREATE TABLE IF NOT EXISTS transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            transaction_type TEXT NOT NULL,
+            amount REAL NOT NULL,
+            description TEXT,
+            timestamp TEXT DEFAULT (datetime('now', 'localtime')),
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    `, (err) => {
+    if (err) {
+      console.error("Transactions table creation failed:", err.message);
+    } else {
+      console.log("Transactions table ready.");
+    }
+  });
+
 });
 
 module.exports = db;

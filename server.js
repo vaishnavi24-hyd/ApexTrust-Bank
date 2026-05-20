@@ -72,16 +72,30 @@ app.get("/register", (req, res) => {
 });
 
 // Dashboard Page
+const transactionModel = require("./models/transactionModel");
 app.get("/dashboard", authMiddleware, (req, res) => {
-  res.render("dashboard", {
-    title: "Dashboard - ApexTrust Bank",
-    activePage: "dashboard"
+  transactionModel.getTransactionsByUserId(res.locals.user.id, (err, transactions) => {
+    if (err) {
+      console.error("Error fetching transactions for dashboard:", err.message);
+      transactions = [];
+    }
+    res.render("dashboard", {
+      title: "Dashboard - ApexTrust Bank",
+      activePage: "dashboard",
+      success: req.query.success || null,
+      error: req.query.error || null,
+      transactions: transactions
+    });
   });
 });
 
 // Import Auth Routes
 const authRoutes = require("./routes/auth");
 app.use("/auth", authRoutes);
+
+// Import Transaction Routes
+const transactionRoutes = require("./routes/transactions");
+app.use("/transactions", transactionRoutes);
 
 // 404 Handler
 app.use((req, res) => {

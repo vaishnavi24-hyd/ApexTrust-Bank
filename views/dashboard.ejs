@@ -30,6 +30,22 @@
     </div>
   <% } %>
 
+  <% if (typeof success !== 'undefined' && success) { %>
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center mb-4 rounded-3 small" role="alert">
+      <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+      <div><%= success %></div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center mb-4 rounded-3 small" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+      <div><%= error %></div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+
   <!-- Dashboard Grid -->
   <div class="row g-4">
     
@@ -54,53 +70,82 @@
         </div>
       </div>
 
-      <!-- Banking Actions Grid -->
-      <h5 class="fw-bold text-primary mb-3">Quick Banking Actions</h5>
-      <div class="row g-3 mb-4">
-        
-        <div class="col-6 col-sm-3">
-          <div class="card card-premium hover-action text-center p-3 h-100 cursor-pointer">
-            <div class="icon-circle icon-primary mx-auto mb-2">
-              <i class="bi bi-arrow-left-right"></i>
-            </div>
-            <span class="small fw-semibold text-dark">Transfer Funds</span>
+      <!-- Secure Transaction Terminal -->
+      <h5 class="fw-bold text-primary mb-3">Secure Transaction Terminal</h5>
+      <div class="card card-premium p-4 mb-4">
+        <ul class="nav nav-pills nav-fill mb-3" id="transactionTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active fw-semibold" id="deposit-tab" data-bs-toggle="pill" data-bs-target="#deposit-pane" type="button" role="tab" aria-controls="deposit-pane" aria-selected="true">
+              <i class="bi bi-wallet2 me-2"></i>Deposit
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link fw-semibold" id="withdraw-tab" data-bs-toggle="pill" data-bs-target="#withdraw-pane" type="button" role="tab" aria-controls="withdraw-pane" aria-selected="false">
+              <i class="bi bi-cash-stack me-2"></i>Withdrawal
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link fw-semibold" id="transfer-tab" data-bs-toggle="pill" data-bs-target="#transfer-pane" type="button" role="tab" aria-controls="transfer-pane" aria-selected="false">
+              <i class="bi bi-arrow-left-right me-2"></i>Wire Transfer
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="transactionTabsContent">
+          <!-- Deposit Pane -->
+          <div class="tab-pane fade show active" id="deposit-pane" role="tabpanel" aria-labelledby="deposit-tab">
+            <form action="/transactions/deposit" method="POST" class="needs-validation" novalidate>
+              <div class="form-floating mb-3">
+                <input type="number" step="0.01" min="0.01" class="form-control" id="depositAmount" name="amount" placeholder="0.00" required>
+                <label for="depositAmount">Deposit Amount ($)</label>
+                <div class="invalid-feedback">Please enter a valid deposit amount (greater than 0).</div>
+              </div>
+              <button type="submit" class="btn btn-primary-custom w-100 py-2 d-flex align-items-center justify-content-center">
+                <i class="bi bi-check-circle-fill me-2"></i> Submit Deposit
+              </button>
+            </form>
+          </div>
+
+          <!-- Withdraw Pane -->
+          <div class="tab-pane fade" id="withdraw-pane" role="tabpanel" aria-labelledby="withdraw-tab">
+            <form action="/transactions/withdraw" method="POST" class="needs-validation" novalidate>
+              <div class="form-floating mb-3">
+                <input type="number" step="0.01" min="0.01" max="<%= user.balance %>" class="form-control" id="withdrawAmount" name="amount" placeholder="0.00" required>
+                <label for="withdrawAmount">Withdrawal Amount ($)</label>
+                <div class="invalid-feedback">Please enter a valid withdrawal amount (not exceeding your balance).</div>
+              </div>
+              <button type="submit" class="btn btn-primary-custom w-100 py-2 d-flex align-items-center justify-content-center">
+                <i class="bi bi-cash-stack me-2"></i> Submit Withdrawal
+              </button>
+            </form>
+          </div>
+
+          <!-- Transfer Pane -->
+          <div class="tab-pane fade" id="transfer-pane" role="tabpanel" aria-labelledby="transfer-tab">
+            <form action="/transactions/transfer" method="POST" class="needs-validation" novalidate>
+              <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="transferEmail" name="recipientEmail" placeholder="recipient@example.com" required>
+                <label for="transferEmail">Recipient Email Address</label>
+                <div class="invalid-feedback">Please enter a valid recipient email address.</div>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="number" step="0.01" min="0.01" max="<%= user.balance %>" class="form-control" id="transferAmount" name="amount" placeholder="0.00" required>
+                <label for="transferAmount">Transfer Amount ($)</label>
+                <div class="invalid-feedback">Please enter a valid transfer amount (not exceeding your balance).</div>
+              </div>
+              <button type="submit" class="btn btn-primary-custom w-100 py-2 d-flex align-items-center justify-content-center">
+                <i class="bi bi-arrow-left-right me-2"></i> Execute Wire Transfer
+              </button>
+            </form>
           </div>
         </div>
-
-        <div class="col-6 col-sm-3">
-          <div class="card card-premium hover-action text-center p-3 h-100 cursor-pointer">
-            <div class="icon-circle icon-success mx-auto mb-2">
-              <i class="bi bi-receipt"></i>
-            </div>
-            <span class="small fw-semibold text-dark">Pay Bills</span>
-          </div>
-        </div>
-
-        <div class="col-6 col-sm-3">
-          <div class="card card-premium hover-action text-center p-3 h-100 cursor-pointer">
-            <div class="icon-circle icon-warning mx-auto mb-2">
-              <i class="bi bi-camera"></i>
-            </div>
-            <span class="small fw-semibold text-dark">Deposit Check</span>
-          </div>
-        </div>
-
-        <div class="col-6 col-sm-3">
-          <div class="card card-premium hover-action text-center p-3 h-100 cursor-pointer">
-            <div class="icon-circle icon-danger mx-auto mb-2">
-              <i class="bi bi-file-earmark-bar-graph"></i>
-            </div>
-            <span class="small fw-semibold text-dark">Statements</span>
-          </div>
-        </div>
-
       </div>
 
       <!-- Recent Transactions Section -->
       <div class="card card-premium p-4">
         <div class="d-flex align-items-center justify-content-between mb-3">
           <h5 class="fw-bold text-primary mb-0">Recent Transactions</h5>
-          <a href="#" class="text-accent text-decoration-none small fw-semibold">View All Activity</a>
+          <span class="text-muted small">Showing last 10 entries</span>
         </div>
 
         <div class="table-responsive">
@@ -109,56 +154,56 @@
               <tr>
                 <th>Date</th>
                 <th>Description</th>
-                <th>Category</th>
+                <th>Type</th>
                 <th>Status</th>
                 <th class="text-end">Amount</th>
               </tr>
             </thead>
             <tbody>
               
-              <tr>
-                <td class="text-muted small">May 20, 2026</td>
-                <td>
-                  <div class="fw-bold text-dark">Chevron Gas Station</div>
-                  <span class="small text-muted">Card ending in 8943</span>
-                </td>
-                <td><span class="badge bg-light text-dark border">Transportation</span></td>
-                <td><span class="text-success small fw-medium"><i class="bi bi-check-circle-fill me-1"></i> Completed</span></td>
-                <td class="text-end transaction-amount amount-out">-$45.20</td>
-              </tr>
-
-              <tr>
-                <td class="text-muted small">May 19, 2026</td>
-                <td>
-                  <div class="fw-bold text-dark">Payroll ACH / ApexTech Corp</div>
-                  <span class="small text-muted">Direct Deposit</span>
-                </td>
-                <td><span class="badge bg-light text-dark border">Income</span></td>
-                <td><span class="text-success small fw-medium"><i class="bi bi-check-circle-fill me-1"></i> Completed</span></td>
-                <td class="text-end transaction-amount amount-in">+$3,450.00</td>
-              </tr>
-
-              <tr>
-                <td class="text-muted small">May 18, 2026</td>
-                <td>
-                  <div class="fw-bold text-dark">Starbucks Coffee #3842</div>
-                  <span class="small text-muted">Card ending in 8943</span>
-                </td>
-                <td><span class="badge bg-light text-dark border">Dining</span></td>
-                <td><span class="text-success small fw-medium"><i class="bi bi-check-circle-fill me-1"></i> Completed</span></td>
-                <td class="text-end transaction-amount amount-out">-$12.80</td>
-              </tr>
-
-              <tr>
-                <td class="text-muted small">May 17, 2026</td>
-                <td>
-                  <div class="fw-bold text-dark">Landlord Rent Payment</div>
-                  <span class="small text-muted">ACH Transfer</span>
-                </td>
-                <td><span class="badge bg-light text-dark border">Housing</span></td>
-                <td><span class="text-warning small fw-medium"><i class="bi bi-clock-fill me-1"></i> Pending</span></td>
-                <td class="text-end transaction-amount amount-out">-$1,200.00</td>
-              </tr>
+              <% if (typeof transactions !== 'undefined' && transactions && transactions.length > 0) { %>
+                <% transactions.forEach(function(tx) { %>
+                  <tr>
+                    <td class="text-muted small">
+                      <%= new Date(tx.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                      <br>
+                      <span class="text-muted text-opacity-75" style="font-size: 0.75rem;">
+                        <%= new Date(tx.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) %>
+                      </span>
+                    </td>
+                    <td>
+                      <div class="fw-bold text-dark"><%= tx.description %></div>
+                      <span class="small text-muted" style="font-size: 0.75rem;">ID: TX-<%= String(tx.id).padStart(5, '0') %></span>
+                    </td>
+                    <td>
+                      <% if (tx.transaction_type === 'deposit') { %>
+                        <span class="badge bg-success-light text-success border border-success border-opacity-25">Deposit</span>
+                      <% } else if (tx.transaction_type === 'withdraw') { %>
+                        <span class="badge bg-danger-light text-danger border border-danger border-opacity-25">Withdrawal</span>
+                      <% } else if (tx.transaction_type === 'transfer_out') { %>
+                        <span class="badge bg-warning-light text-warning border border-warning border-opacity-25">Transfer Out</span>
+                      <% } else if (tx.transaction_type === 'transfer_in') { %>
+                        <span class="badge bg-info-light text-info border border-info border-opacity-25">Transfer In</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <span class="text-success small fw-medium">
+                        <i class="bi bi-check-circle-fill me-1"></i> Completed
+                      </span>
+                    </td>
+                    <td class="text-end transaction-amount <%= (tx.transaction_type === 'deposit' || tx.transaction_type === 'transfer_in') ? 'amount-in' : 'amount-out' %>">
+                      <%= (tx.transaction_type === 'deposit' || tx.transaction_type === 'transfer_in') ? '+' : '-' %>$<%= parseFloat(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+                    </td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr>
+                  <td colspan="5" class="text-center text-muted py-4">
+                    <i class="bi bi-card-list fs-2 text-muted mb-2 d-block"></i>
+                    No transactions recorded yet.
+                  </td>
+                </tr>
+              <% } %>
 
             </tbody>
           </table>
@@ -256,5 +301,21 @@
 
   </div>
 </div>
+
+<script>
+  (function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+      }, false)
+    })
+  })()
+</script>
 
 <%- include('partials/footer') %>

@@ -262,3 +262,20 @@ main {
 .amount-out {
   color: var(--text-main);
 }
+
+/* Custom Pills Styling for Transaction Terminal */
+.nav-pills .nav-link {
+  color: var(--text-muted);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+.nav-pills .nav-link:hover {
+  background-color: var(--bg-gray);
+  color: var(--primary);
+}
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  background-color: var(--accent);
+  color: var(--white);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+}
