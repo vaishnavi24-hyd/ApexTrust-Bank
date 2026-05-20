@@ -174,33 +174,66 @@
       <div class="card card-premium session-card active-session p-4 mb-4">
         <div class="d-flex align-items-center justify-content-between mb-3">
           <h5 class="fw-bold text-primary mb-0">Session Status</h5>
-          <span class="badge bg-success text-white">Secure</span>
+          <span class="badge bg-success-light text-success fw-bold">Active</span>
         </div>
 
         <div class="text-center py-3 my-2 bg-light rounded-3">
-          <div class="display-6 fw-bold text-primary mb-1">14:59</div>
+          <div class="display-6 fw-bold text-primary mb-1" id="sessionTimer">15:00</div>
           <span class="text-muted small text-uppercase fw-semibold tracking-wider">Minutes Remaining</span>
         </div>
 
         <ul class="list-unstyled small mb-4">
           <li class="d-flex align-items-center justify-content-between py-2 border-bottom">
-            <span class="text-muted">Auth Status:</span>
-            <span class="fw-semibold text-success">Verified Credentials</span>
+            <span class="text-muted">Logged-in User:</span>
+            <span class="fw-semibold text-dark text-truncate" style="max-width: 180px;" title="<%= sessionInfo.userEmail %>"><%= sessionInfo.userEmail %></span>
+          </li>
+          <li class="d-flex align-items-center justify-content-between py-2 border-bottom">
+            <span class="text-muted">Login Time:</span>
+            <span class="fw-semibold text-dark"><%= new Date(sessionInfo.loginTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) %></span>
           </li>
           <li class="d-flex align-items-center justify-content-between py-2 border-bottom">
             <span class="text-muted">Inactivity Timeout:</span>
-            <span class="fw-semibold">15 Minutes</span>
+            <span class="fw-semibold text-dark">15 Minutes</span>
           </li>
           <li class="d-flex align-items-center justify-content-between py-2">
             <span class="text-muted">Tracking Token:</span>
-            <code class="text-dark">apt_938fd8a2e1</code>
+            <code class="text-dark">apt_<%= String(sessionInfo.userId).padStart(4, '0') %>_<%= new Date(sessionInfo.loginTime).getTime().toString(16).slice(-6) %></code>
           </li>
         </ul>
 
         <!-- Extend Session Button -->
-        <button onclick="location.href='/dashboard?email=<%= encodeURIComponent(user.email) %>&extended=true'" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center py-2">
+        <button onclick="location.href='/dashboard?extended=true'" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center py-2">
           <i class="bi bi-arrow-repeat me-2"></i> Extend Secure Session
         </button>
+
+        <script>
+          (function() {
+            const loginTime = new Date("<%= sessionInfo.loginTime %>").getTime();
+            const timeoutMs = 15 * 60 * 1000;
+            const expireTime = loginTime + timeoutMs;
+
+            function updateTimer() {
+              const now = Date.now();
+              const remainingMs = expireTime - now;
+
+              if (remainingMs <= 0) {
+                document.getElementById('sessionTimer').innerText = "00:00";
+                clearInterval(interval);
+                window.location.href = '/dashboard';
+                return;
+              }
+
+              const totalSec = Math.floor(remainingMs / 1000);
+              const mins = Math.floor(totalSec / 60);
+              const secs = totalSec % 60;
+              document.getElementById('sessionTimer').innerText = 
+                (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
+            }
+
+            updateTimer();
+            const interval = setInterval(updateTimer, 1000);
+          })();
+        </script>
       </div>
 
       <!-- Security Advisory Widget -->

@@ -30,7 +30,7 @@ const registerValidation = [
   })
 ];
 
-// POST /auth/register
+// POST /register
 router.post('/register', registerValidation, (req, res) => {
   const errors = validationResult(req);
   const values = req.body;
@@ -115,7 +115,7 @@ const loginValidation = [
     .withMessage('Password is required.')
 ];
 
-// POST /auth/login
+// POST /login
 router.post('/login', loginValidation, (req, res) => {
   const errors = validationResult(req);
   const values = req.body;
@@ -181,11 +181,30 @@ router.post('/login', loginValidation, (req, res) => {
         });
       }
 
-      // Successful login - Redirect to dashboard appending the email query
+      // Successful login - Create Session variables
+      req.session.userId = user.id;
+      req.session.userEmail = user.email;
+      req.session.loginTime = new Date().toISOString();
+
       console.log(`User logged in successfully: ${user.email}`);
-      res.redirect(`/dashboard?email=${encodeURIComponent(user.email)}`);
+      res.redirect('/dashboard');
     });
   });
+});
+
+// GET /logout
+router.get('/logout', (req, res) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Error destroying session during logout:', err);
+      }
+      res.clearCookie('connect.sid');
+      res.redirect('/login?success=You+have+been+logged+out+successfully.');
+    });
+  } else {
+    res.redirect('/login');
+  }
 });
 
 module.exports = router;
