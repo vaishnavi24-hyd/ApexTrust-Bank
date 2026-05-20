@@ -8,9 +8,9 @@
       <span class="badge bg-success-light text-success fw-bold px-3 py-2 rounded-pill mb-2">
         <i class="bi bi-patch-check-fill me-1"></i> Account Active
       </span>
-      <h2 class="fw-bold text-dark mb-0">Welcome back, John Doe</h2>
+      <h2 class="fw-bold text-dark mb-0">Welcome back, <%= user.fullname %></h2>
       <p class="text-muted small mb-0">
-        Account: <span class="fw-medium text-dark">#1029-4829-8943</span> &bull; Last access: <span class="fw-medium text-dark">Today at 18:45 (IP: 192.168.1.42)</span>
+        Account: <span class="fw-medium text-dark">#1029-4829-<%= String(user.id).padStart(4, '0') %></span> &bull; Last access: <span class="fw-medium text-dark">Today at 18:45 (IP: 192.168.1.42)</span>
       </p>
     </div>
     <div class="col-md-4 text-md-end">
@@ -22,6 +22,14 @@
     </div>
   </div>
 
+  <% if (typeof locals.extended !== 'undefined' || (typeof query !== 'undefined' && query.extended)) { %>
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center mb-4 rounded-3 small" role="alert">
+      <i class="bi bi-shield-check-fill me-2 fs-5"></i>
+      <div>Your secure banking session has been extended successfully.</div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>
+
   <!-- Dashboard Grid -->
   <div class="row g-4">
     
@@ -32,10 +40,10 @@
       <div class="card card-premium balance-card p-4 mb-4">
         <div class="row align-items-center">
           <div class="col-md-8">
-            <span class="card-subtitle uppercase small text-uppercase">Primary Checking Balance</span>
-            <h1 class="balance-amount my-2">$24,850.42</h1>
+            <span class="card-subtitle uppercase small text-uppercase"><%= user.account_type.charAt(0).toUpperCase() + user.account_type.slice(1) %> Account Balance</span>
+            <h1 class="balance-amount my-2">$<%= parseFloat(user.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %></h1>
             <p class="mb-0 text-light-gray small">
-              Available Funds: <span class="text-white fw-bold">$24,850.42</span> &bull; Ledger Balance: <span class="text-white">$25,120.00</span>
+              Available Funds: <span class="text-white fw-bold">$<%= parseFloat(user.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %></span> &bull; Ledger Balance: <span class="text-white">$<%= parseFloat(user.balance).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %></span>
             </p>
           </div>
           <div class="col-md-4 text-md-end mt-3 mt-md-0">
@@ -190,7 +198,7 @@
         </ul>
 
         <!-- Extend Session Button -->
-        <button class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center py-2">
+        <button onclick="location.href='/dashboard?email=<%= encodeURIComponent(user.email) %>&extended=true'" class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center py-2">
           <i class="bi bi-arrow-repeat me-2"></i> Extend Secure Session
         </button>
       </div>
